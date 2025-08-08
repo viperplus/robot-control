@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Control del Robot</title>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+  button { width: 100px; height: 50px; margin: 10px; font-size: 16px; }
+</style>
+</head>
+<body>
+<h1>Control del Robot</h1>
+
+<button onclick="sendCommand('adelante')">Adelante</button><br>
+<button onclick="sendCommand('izquierda')">Izquierda</button>
+<button onclick="sendCommand('stop')">Stop</button>
+<button onclick="sendCommand('derecha')">Derecha</button><br>
+<button onclick="sendCommand('atras')">Atrás</button>
+
+<script>
+  const broker = 'wss://test.mosquitto.org:8081/mqtt';
+  const topic = 'robot/control';
+
+  const client = mqtt.connect(broker);
+
+  client.on('connect', () => {
+    console.log('Conectado al broker MQTT');
+  });
+
+  function sendCommand(cmd) {
+    client.publish(topic, cmd);
+    console.log('Comando enviado:', cmd);
+  }
+</script>
+
+</body>
+</html>
