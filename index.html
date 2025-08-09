@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Control LED NodeMCU</title>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+  }
+  button {
+    width: 120px;
+    height: 50px;
+    font-size: 18px;
+    margin: 15px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<h1>Control del LED NodeMCU</h1>
+
+<button onclick="sendCommand('on')">Encender LED</button>
+<button onclick="sendCommand('off')">Apagar LED</button>
+
+<script>
+  const broker = 'wss://test.mosquitto.org:8081/mqtt';
+  const topic = 'robot/control';
+
+  // Conectamos al broker MQTT vía WebSocket seguro
+  const client = mqtt.connect(broker);
+
+  client.on('connect', () => {
+    console.log('Conectado al broker MQTT');
+  });
+
+  client.on('error', (err) => {
+    console.error('Error de conexión MQTT:', err);
+  });
+
+  function sendCommand(cmd) {
+    client.publish(topic, cmd);
+    console.log('Comando enviado:', cmd);
+  }
+</script>
+</body>
+</html>
