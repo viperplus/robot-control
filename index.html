@@ -1,22 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Control Robot MQTT</title>
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+    h1 { margin-bottom: 20px; }
+    button {
+      width: 150px;
+      height: 50px;
+      margin: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 10px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+    }
+    button.stop { background-color: red; }
+  </style>
 </head>
 <body>
   <h1>Control Robot MQTT</h1>
-  <button onclick="sendCommand('adelante')">Adelante</button>
-  <button onclick="sendCommand('atras')">Atrás</button>
-  <button onclick="sendCommand('izquierda')">Izquierda</button>
-  <button onclick="sendCommand('derecha')">Derecha</button>
-  <button onclick="sendCommand('stop')">Parar</button>
+  <button onclick="sendCommand('adelante')">⬆️ Adelante</button><br>
+  <button onclick="sendCommand('izquierda')">⬅️ Izquierda</button>
+  <button onclick="sendCommand('derecha')">➡️ Derecha</button><br>
+  <button onclick="sendCommand('atras')">⬇️ Atrás</button><br>
+  <button class="stop" onclick="sendCommand('stop')">⏹️ Parar</button>
 
   <script>
+    // Conexión al broker MQTT público
     const client = mqtt.connect('wss://test.mosquitto.org:8081/mqtt');
 
     client.on('connect', () => {
-      console.log('Conectado a MQTT broker');
+      console.log('Conectado a broker MQTT');
+    });
+
+    client.on('error', (err) => {
+      console.error('Error MQTT: ', err);
     });
 
     function sendCommand(cmd) {
