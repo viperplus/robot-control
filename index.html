@@ -1,49 +1,24 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-<meta charset="UTF-8" />
-<title>Control LED NodeMCU</title>
-<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 50px;
-  }
-  button {
-    width: 120px;
-    height: 50px;
-    font-size: 18px;
-    margin: 15px;
-    cursor: pointer;
-  }
-</style>
+  <title>Control Robot MQTT</title>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 </head>
 <body>
-<h1>Control del LED NodeMCU</h1>
+  <h1>Control Remoto Robot</h1>
+  <button onclick="send('adelante')">Adelante</button>
+  <button onclick="send('atras')">Atrás</button>
+  <button onclick="send('izquierda')">Izquierda</button>
+  <button onclick="send('derecha')">Derecha</button>
+  <button onclick="send('stop')">Parar</button>
 
-<button onclick="sendCommand('on')">Encender LED</button>
-<button onclick="sendCommand('off')">Apagar LED</button>
-
-<script>
-  const broker = 'wss://test.mosquitto.org:8081/mqtt';
-  const topic = 'robot/control';
-
-  // Conectamos al broker MQTT vía WebSocket seguro
-  const client = mqtt.connect(broker);
-
-  client.on('connect', () => {
-    console.log('Conectado al broker MQTT');
-  });
-
-  client.on('error', (err) => {
-    console.error('Error de conexión MQTT:', err);
-  });
-
-  function sendCommand(cmd) {
-    client.publish(topic, cmd);
-    console.log('Comando enviado:', cmd);
-  }
-</script>
+  <script>
+    const client = mqtt.connect('ws://test.mosquitto.org:8080/mqtt');
+    client.on('connect', () => { console.log('Conectado a MQTT'); });
+    function send(cmd) {
+      client.publish('robot/control', cmd);
+      console.log('Comando enviado:', cmd);
+    }
+  </script>
 </body>
 </html>
