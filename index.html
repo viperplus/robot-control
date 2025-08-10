@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Control Robot MQTT</title>
+  <title>Control Remoto Robot MQTT</title>
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 </head>
 <body>
-  <h1>Control Remoto Robot</h1>
+  <h1>Control Robot</h1>
   <button onclick="send('adelante')">Adelante</button>
   <button onclick="send('atras')">Atrás</button>
   <button onclick="send('izquierda')">Izquierda</button>
@@ -13,11 +13,16 @@
   <button onclick="send('stop')">Parar</button>
 
   <script>
+    // Conectar al broker MQTT público vía WebSocket
     const client = mqtt.connect('ws://test.mosquitto.org:8080/mqtt');
-    client.on('connect', () => { console.log('Conectado a MQTT'); });
-    function send(cmd) {
-      client.publish('robot/control', cmd);
-      console.log('Comando enviado:', cmd);
+
+    client.on('connect', () => {
+      console.log('Conectado al broker MQTT');
+    });
+
+    function send(command) {
+      client.publish('robot/control', command);
+      console.log('Comando enviado:', command);
     }
   </script>
 </body>
